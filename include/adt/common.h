@@ -3,6 +3,8 @@
 
 /* Internal definitions shared between adt, libfsm, and libre */
 
+#include <stdio.h>
+
 #if defined(__clang__)
 /* Newer versions of clang's UBSan emit warnings about *all* unsigned
  * integer overflows. While they are defined behavior, overflow can
@@ -102,5 +104,29 @@
 #define DIFF_MSEC_ALWAYS(A, B, C, D)
 #define DIFF_USEC_ALWAYS(A, B, C, D)
 #endif
+
+#if defined(_WIN32) || defined(_WIN64)
+    #define INLINE __inline
+#else
+    #define INLINE __inline__
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+	#define POPCOUNT(V) __popcnt(V)
+#else
+	#define POPCOUNT(V) __builtin_popcountl(V)
+#endif
+
+static inline FILE* libfsm_tmpfile(void) {
+#if defined(_WIN32) || defined(_WIN64)
+	FILE *ret = NULL;
+	if (tmpfile_s(&ret)) {
+		return NULL;
+	}
+	return ret;
+#else
+	return tmpfile();
+#endif
+}
 
 #endif

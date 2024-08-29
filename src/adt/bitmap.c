@@ -13,6 +13,7 @@
 
 #include <adt/bitmap.h>
 #include <adt/u64bitset.h>
+#include <adt/common.h>
 
 #include <print/esc.h>
 
@@ -156,19 +157,19 @@ bm_print(FILE *f, const struct fsm_options *opt, const struct bm *bm,
 	hi = -1;
 	for (;;) {
 		/* start of range */
-		lo = bm_next(bm, hi, mode != MODE_INVERT);
+		lo = (int)bm_next(bm, hi, mode != MODE_INVERT);
 		if (lo > UCHAR_MAX) {
 			break;
 		}
 
 		/* end of range */
-		hi = bm_next(bm, lo, mode == MODE_INVERT);
+		hi = (int)bm_next(bm, lo, mode == MODE_INVERT);
 		if (hi > UCHAR_MAX && lo < UCHAR_MAX) {
 			hi = UCHAR_MAX;
 		}
 
 		if (!isalnum((unsigned char) lo) && isalnum((unsigned char) hi)) {
-			r = escputc(f, opt, lo);
+			r = escputc(f, opt, (unsigned char)lo);
 			if (r == -1) {
 				return -1;
 			}
@@ -210,7 +211,7 @@ bm_print(FILE *f, const struct fsm_options *opt, const struct bm *bm,
 		case 1:
 		case 2:
 		case 3:
-			r = escputc(f, opt, lo);
+			r = escputc(f, opt, (unsigned char)lo);
 			if (r == -1) {
 				return -1;
 			}
@@ -220,7 +221,7 @@ bm_print(FILE *f, const struct fsm_options *opt, const struct bm *bm,
 			break;
 
 		default:
-			r = escputc(f, opt, lo);
+			r = escputc(f, opt, (unsigned char)lo);
 			if (r == -1) {
 				return -1;
 			}
@@ -232,7 +233,7 @@ bm_print(FILE *f, const struct fsm_options *opt, const struct bm *bm,
 			}
 			n += 1;
 
-			r = escputc(f, opt, hi - 1);
+			r = escputc(f, opt, (unsigned char)(hi - 1));
 			if (r == -1) {
 				return -1;
 			}
@@ -278,7 +279,7 @@ bm_snprint(const struct bm *bm, const struct fsm_options *opt,
 	 * and read it back for string output. This is not ideal.
 	 */
 
-	f = tmpfile();
+	f = libfsm_tmpfile();
 	if (f == NULL) {
 		return -1;
 	}

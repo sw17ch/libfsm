@@ -16,12 +16,13 @@ xstrdup(const char *s)
 {
 	char *new;
 
-	new = malloc(strlen(s) + 1);
+	size_t len = strlen(s) + 1;
+	new = malloc(len);
 	if (new == NULL) {
 		return NULL;
 	}
 
-	return strcpy(new, s);
+	return strncpy(new, s, len);
 }
 
 char *

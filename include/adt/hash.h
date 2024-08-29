@@ -20,7 +20,7 @@
 /* #define HASH_PROBE_LIMIT 100 */
 
 SUPPRESS_EXPECTED_UNSIGNED_INTEGER_OVERFLOW()
-static __inline__ uint64_t
+static INLINE uint64_t
 hash_id(uint64_t id)
 {
 	/* xorshift* A1(12,25,27),
@@ -33,7 +33,7 @@ hash_id(uint64_t id)
 }
 
 SUPPRESS_EXPECTED_UNSIGNED_INTEGER_OVERFLOW()
-static __inline__ uint64_t
+static INLINE uint64_t
 hash_ids(size_t count, const fsm_state_t *ids)
 {
 	uint64_t h = 0;

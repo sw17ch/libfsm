@@ -13,6 +13,7 @@
 #include <stddef.h>
 
 #include <adt/alloc.h>
+#include <adt/common.h>
 
 #define PV_H_LOG 0
 
@@ -24,7 +25,7 @@
  * array of offsets into in[N] such that in[pv[0..N]] would give the
  * values of in[] in ascending order (but don't actually rearrange it,
  * just get the offsets). This is O(n). */
-static __inline__ unsigned *
+static INLINE unsigned *
 permutation_vector_with_size_and_offset(const struct fsm_alloc *alloc,
     size_t length, size_t max_value, void *in, size_t struct_size, size_t offset)
 {
@@ -95,7 +96,7 @@ cleanup:
 }
 
 /* Build a permutation vector from a bare array of unsigned ints. */
-static __inline__ unsigned *
+static INLINE unsigned *
 permutation_vector(const struct fsm_alloc *alloc,
     size_t length, size_t max_value, unsigned *in)
 {

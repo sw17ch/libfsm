@@ -630,7 +630,7 @@ find_first_group_label(const struct edge_group *g, unsigned char *label)
 		}
 		for (bit = 0; bit < 64; bit++) {
 			if (g->symbols[i] & ((uint64_t)1 << bit)) {
-				*label = i*64 + bit;
+				*label = (unsigned char)(i*64 + bit);
 				return 1;
 			}
 		}
@@ -1019,7 +1019,7 @@ edge_set_next(struct edge_iter *it, struct fsm_edge *e)
 				it->j += 64;
 			} else {
 				if (SYMBOLS_GET(eg->symbols, it->j)) {
-					e->symbol = it->j;
+					e->symbol = (unsigned char)it->j;
 					e->state = eg->to;
 					it->j++;
 					return 1;
